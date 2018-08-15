@@ -1,0 +1,45 @@
+#dropbox {
+	display: flex;
+	flex-direction: column;
+	width: var( --dropbox-width );
+	height: var( --dropbox-height );
+	color: var( --dropbox-color );
+	border: 8px dashed var( --dropbox-color );
+	border-radius: 8px;
+	transition-duration: var( --dropbox-drag-transDur );
+	transition-property: color transform border;
+	background-color: var( --dropbox-bgColor );
+	pointer-events: none;
+}
+
+#dropbox div {
+	margin-bottom: 10px;
+}
+
+#dropbox div.ico-download::before {
+	font-family: "FontAwesome";
+	content: "\f33d";
+	font-size: 4em;
+}
+
+#dropbox span {
+	font-style: italic;
+	font-size: 1em;
+	font-weight: 100;
+}
+
+#dropbox div.ico-download::before,
+#dropbox span {
+	transition: font-size var( --dropbox-drag-transDur );
+}
+
+#dropbox.dragover {
+	border-color: var( --dropbox-dragover-color );
+	color: var( --dropbox-dragover-color );
+	transform: scale( 1.1 );
+}
+
+#dropbox.dragover span,
+#dropbox.dragover div.ico-download {
+	font-size: 1.1em;
+}
