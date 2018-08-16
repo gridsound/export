@@ -3,10 +3,10 @@ class DragAndDrop {
 		this.elDropBox = elDropBox;
 		this.elBtnQuit = document.querySelector( ".quit" );
 		this.elBtnQuit.onclick = this._evtQuit.bind( this );
-		document.body.ondrop = this._dropHandler.bind( this );
-		document.body.ondragenter = this._dragEnterHandler.bind( this );
-		document.body.ondragover = this._dragOverHandler.bind( this );
-		document.body.ondragleave = this._dragLeaveHandler.bind( this );
+		document.body.ondrop = this._evtDropHandler.bind( this );
+		document.body.ondragenter = this._evtDragEnterHandler.bind( this );
+		document.body.ondragover = this._evtDragOverHandler.bind( this );
+		document.body.ondragleave = this._evtDragLeaveHandler.bind( this );
 		this._fillInfo();
 	}
 
@@ -58,7 +58,7 @@ class DragAndDrop {
 		};
 		f.readAsText( blob );
 	}
-	_dropHandler( e ) {
+	_evtDropHandler( e ) {
 		const files = e.dataTransfer.items || e.dataTransfer.files,
 			file = files[ 0 ];
 
@@ -69,16 +69,16 @@ class DragAndDrop {
 		}
 		return false;
 	}
-	_dragEnterHandler( e ) {
+	_evtDragEnterHandler( e ) {
 		this.elDropBox.classList.add( "dragover" );
 		this._evtQuit.call( this );
 		return false;
 	}
-	_dragOverHandler( e ) {
+	_evtDragOverHandler( e ) {
 		e.preventDefault();
 		return false;
 	}
-	_dragLeaveHandler( e ) {
+	_evtDragLeaveHandler( e ) {
 		this.elDropBox.classList.remove( "dragover" );
 	}
 }
