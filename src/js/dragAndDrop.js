@@ -26,6 +26,7 @@ class DragAndDrop {
 		elDur.textContent = "duration: " + this.beatToTime( d.duration, d.bpm );
 		elBtn.textContent = "Render";
 		elBtn.classList.add( "btn-render" );
+		elBtn.onclick = render._evtRender.bind( render, d );
 		el.append( elTitle, elDur, elBtn );
 		this.elDropBox.classList.add( "render" );
 	}
