@@ -4,15 +4,26 @@
 	<title>GridSound - Export</title>
 	<link rel="stylesheet" type="text/css" href="src/css/root.css">
 	<link rel="stylesheet" type="text/css" href="src/css/fonts.css">
+	<link rel="stylesheet" type="text/css" href="src/css/icon.css">
 	<link rel="stylesheet" type="text/css" href="src/css/app.css">
 	<link rel="stylesheet" type="text/css" href="src/css/dropbox.css">
 </head>
 <body class="align-center">
 	<div id="dropbox" class="align-center">
-		<div class="ico-download"></div>
-		<span>Drop GridSound file (.gs) here</span>
+		<div class="ico state"></div>
+		<div class="ico quit"></div>
+		<span id="default">Drop GridSound file (.gs) here</span>
+		<span id="error"></span>
+		<div id="data">
+			<b>title:</b>
+			<span id="title"></span>
+			<br/>
+			<b>duration:</b>
+			<span id="duration"></span>
+		</span>
 	</div>
 
+	<script type="text/javascript" src="src/js/dragAndDrop.js"></script>
 	<script type="text/javascript" src="src/js/index.js"></script>
 </body>
 </html>

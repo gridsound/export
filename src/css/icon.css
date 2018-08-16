@@ -1,0 +1,22 @@
+.ico {
+	font-family: "FontAwesome";
+	font-size: 4em;
+	margin-bottom: 10px;
+}
+
+.state::before {
+	content: "\f56d";
+}
+
+.render .state::before {
+	content: "\f316";
+}
+
+.error .state::before {
+	content: "\f317";
+}
+
+.render .quit::before {
+	content: "\f00d";
+}
+

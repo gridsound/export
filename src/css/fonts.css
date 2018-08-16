@@ -1,10 +1,9 @@
 @font-face {
 	font-family: "Inconsolata";
-	src: url( "../../assets/inconsolata-regular.ttf" );
+	src: url( "../../../daw/assets/inconsolata-regular.ttf" );
 }
-
 
 @font-face {
 	font-family: "FontAwesome";
-	src: url( "../../assets/fontawesome-solid-900.woff" ) format( "woff" );
+	src: url( "../../../daw/assets/fa-solid-900.woff" ) format( "woff" );
 }

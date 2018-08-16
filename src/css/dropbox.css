@@ -1,4 +1,5 @@
 #dropbox {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	width: var( --dropbox-width );
@@ -8,38 +9,46 @@
 	border-radius: 8px;
 	transition-duration: var( --dropbox-drag-transDur );
 	transition-property: color transform border;
-	background-color: var( --dropbox-bgColor );
 	pointer-events: none;
 }
 
-#dropbox div {
-	margin-bottom: 10px;
-}
-
-#dropbox div.ico-download::before {
-	font-family: "FontAwesome";
-	content: "\f33d";
-	font-size: 4em;
-}
-
-#dropbox span {
+#default,
+#error {
 	font-style: italic;
 	font-size: 1em;
 	font-weight: 100;
 }
 
-#dropbox div.ico-download::before,
-#dropbox span {
+.quit {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 5px;
+	font-size: 1em;
+	pointer-events: visible;
+}
+
+.icon::before,
+span {
 	transition: font-size var( --dropbox-drag-transDur );
 }
 
+#dropbox.render,
 #dropbox.dragover {
 	border-color: var( --dropbox-dragover-color );
 	color: var( --dropbox-dragover-color );
 	transform: scale( 1.1 );
 }
 
-#dropbox.dragover span,
-#dropbox.dragover div.ico-download {
+.dragover #default {
 	font-size: 1.1em;
 }
+
+#dropbox:not(.render) .quit,
+#dropbox:not(.error) #error,
+#dropbox:not(.render) #data,
+.render #default,
+.error #default {
+	display: none;
+}
+
