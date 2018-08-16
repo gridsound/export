@@ -2,7 +2,7 @@ class DragAndDrop {
 	constructor( elDropBox ) {
 		this.elDropBox = elDropBox;
 		this.elBtnQuit = document.querySelector( ".quit" );
-		this.elBtnQuit.onclick = this._quit.bind( this );
+		this.elBtnQuit.onclick = this._evtQuit.bind( this );
 		document.body.ondrop = this._dropHandler.bind( this );
 		document.body.ondragenter = this._dragEnterHandler.bind( this );
 		document.body.ondragover = this._dragOverHandler.bind( this );
@@ -17,8 +17,7 @@ class DragAndDrop {
 	}
 
 	// private
-	_quit( e ) {
-		this.elDropBox.classList.remove( "error" );
+	_evtQuit( e ) {
 		this.elDropBox.classList.remove( "render" );
 		this._fillInfo();
 	}
@@ -72,7 +71,7 @@ class DragAndDrop {
 	}
 	_dragEnterHandler( e ) {
 		this.elDropBox.classList.add( "dragover" );
-		this._quit.call( this );
+		this._evtQuit.call( this );
 		return false;
 	}
 	_dragOverHandler( e ) {
