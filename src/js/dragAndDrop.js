@@ -29,13 +29,13 @@ class DragAndDrop {
 		el.append( elTitle, elDur, elBtn );
 		this.elDropBox.classList.add( "render" );
 	}
-	_fillInfo( type = "default", d = null ) {
+	_fillInfo( d ) {
 		const elInfo = document.getElementById( "info" );
 
 		elInfo.innerHTML = "";
-		if ( type === "error" ) {
+		if ( typeof d === "string" ) {
 			elInfo.textContent = `${d} is not a GridSound file`;
-		} else if ( type === "file" ) {
+		} else if ( typeof d === "object" ) {
 			this._fillInfoFile.call( this, elInfo, d );
 		} else {
 			elInfo.textContent = "Drop GridSound file (.gs) here";
@@ -47,10 +47,12 @@ class DragAndDrop {
 		f.onload = e => {
 			try {
 				var d = JSON.parse( e.target.result );
+				
+				this._fillInfo.call( this, d );
 			} catch ( err ) {
-				this._fillInfo.call( this, "error", blob.name );
+				this._fillInfo.call( this, blob.name );
+				console.error( err );
 			}
-			this._fillInfo.call( this, "file", d );
 		};
 		f.readAsText( blob );
 	}
