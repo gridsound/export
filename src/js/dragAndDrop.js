@@ -24,11 +24,14 @@ class DragAndDrop {
 	}
 	_fillInfoFile( el, d ) {
 		const elTitle = document.createElement( "div" ),
-			elDur = document.createElement( "div" );
+			elDur = document.createElement( "div" ),
+			elBtn = document.createElement( "a" );
 
 		elTitle.innerHTML = "title: <b>" + d.name || "<i>Untitled</i>" + "</b>";
 		elDur.textContent = "duration: " + this.beatToTime( d.duration, d.bpm );
-		el.append( elTitle, elDur );
+		elBtn.textContent = "Render";
+		elBtn.classList.add( "btn-render" );
+		el.append( elTitle, elDur, elBtn );
 		this.elDropBox.classList.add( "render" );
 	}
 	_fillInfo( type = "default", d = null ) {
