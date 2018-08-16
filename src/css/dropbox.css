@@ -4,7 +4,7 @@
 	width: var( --dropbox-width );
 	height: var( --dropbox-height );
 	color: var( --dropbox-color );
-	border: 8px dashed var( --dropbox-color );
+	border: 8px dashed;
 	border-radius: 8px;
 	transition-duration: var( --dropbox-drag-transDur );
 	transition-property: color transform border;
