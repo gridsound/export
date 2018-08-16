@@ -17,10 +17,6 @@ class DragAndDrop {
 	}
 
 	// private
-	_evtQuit( e ) {
-		this.elDropBox.classList.remove( "render" );
-		this._fillInfo();
-	}
 	_fillInfoFile( el, d ) {
 		const elTitle = document.createElement( "div" ),
 			elDur = document.createElement( "div" ),
@@ -57,6 +53,10 @@ class DragAndDrop {
 			this._fillInfo.call( this, "file", d );
 		};
 		f.readAsText( blob );
+	}
+	_evtQuit( e ) {
+		this.elDropBox.classList.remove( "render" );
+		this._fillInfo();
 	}
 	_evtDropHandler( e ) {
 		const files = e.dataTransfer.items || e.dataTransfer.files,
