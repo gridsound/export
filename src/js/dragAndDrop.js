@@ -7,6 +7,7 @@ class DragAndDrop {
 		document.body.ondragenter = this._dragEnterHandler.bind( this );
 		document.body.ondragover = this._dragOverHandler.bind( this );
 		document.body.ondragleave = this._dragLeaveHandler.bind( this );
+		this._fillInfo();
 	}
 
 	beatToTime( b, bpm ) {
@@ -19,27 +20,40 @@ class DragAndDrop {
 	_quit( e ) {
 		this.elDropBox.classList.remove( "error" );
 		this.elDropBox.classList.remove( "render" );
+		this._fillInfo();
 	}
-	_fillData( e, name ) {
-		try {
-			const d = JSON.parse( e.target.result ),
-				elTitle = document.getElementById( "title" ),
-				elDur = document.getElementById( "duration" );
+	_fillInfoFile( el, d ) {
+		const elTitle = document.createElement( "div" ),
+			elDur = document.createElement( "div" );
 
-			elTitle.innerHTML = d.name || "<i>Untitled</i>";
-			elDur.textContent = this.beatToTime(d.duration, d.bpm);
-			this.elDropBox.classList.add( "render" );
-		} catch ( err ) {
-			const elError = document.getElementById( "error" );
+		elTitle.innerHTML = "title: <b>" + d.name || "<i>Untitled</i>" + "</b>";
+		elDur.textContent = "duration: " + this.beatToTime( d.duration, d.bpm );
+		el.append( elTitle, elDur );
+		this.elDropBox.classList.add( "render" );
+	}
+	_fillInfo( type = "default", d = null ) {
+		const elInfo = document.getElementById( "info" );
 
-			elError.textContent = `${name} is not a GridSound file`;
-			this.elDropBox.classList.add( "error" );
+		elInfo.innerHTML = "";
+		if ( type === "error" ) {
+			elInfo.textContent = `${d} is not a GridSound file`;
+		} else if ( type === "file" ) {
+			this._fillInfoFile.call( this, elInfo, d );
+		} else {
+			elInfo.textContent = "Drop GridSound file (.gs) here";
 		}
 	}
 	_readFile( blob ) {
 		const f = new FileReader();
 
-		f.onload = e => this._fillData.call( this, e, blob.name );
+		f.onload = e => {
+			try {
+				var d = JSON.parse( e.target.result );
+			} catch ( err ) {
+				this._fillInfo.call( this, "error", blob.name );
+			}
+			this._fillInfo.call( this, "file", d );
+		};
 		f.readAsText( blob );
 	}
 	_dropHandler( e ) {

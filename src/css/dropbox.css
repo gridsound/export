@@ -12,27 +12,6 @@
 	pointer-events: none;
 }
 
-#default,
-#error {
-	font-style: italic;
-	font-size: 1em;
-	font-weight: 100;
-}
-
-.quit {
-	position: absolute;
-	top: 0;
-	right: 0;
-	padding: 5px;
-	font-size: 1em;
-	pointer-events: visible;
-}
-
-.icon::before,
-span {
-	transition: font-size var( --dropbox-drag-transDur );
-}
-
 #dropbox.render,
 #dropbox.dragover {
 	border-color: var( --dropbox-dragover-color );
@@ -40,15 +19,28 @@ span {
 	transform: scale( 1.1 );
 }
 
-.dragover #default {
+.quit {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 2px 5px;
+	font-size: 1em;
+	pointer-events: visible;
+}
+
+#info {
+	display: flex;
+	flex-direction: column;
+	font-size: 1em;
+	font-weight: 100;
+}
+
+.dragover #info {
 	font-size: 1.1em;
 }
 
-#dropbox:not(.render) .quit,
-#dropbox:not(.error) #error,
-#dropbox:not(.render) #data,
-.render #default,
-.error #default {
-	display: none;
+.icon::before,
+#info {
+	transition: font-size var( --dropbox-drag-transDur );
 }
 
