@@ -1,12 +1,15 @@
 class DragAndDrop {
 	constructor( elDropBox ) {
-		this.elDropBox = elDropBox;
-		this.elBtnQuit = document.querySelector( ".quit" );
-		this.elBtnQuit.onclick = this._evtQuit.bind( this );
+		this.root = elDropBox;
+		this.elInfo = this.root.querySelector( "#info" );
+		this.btnQ = this.root.querySelector( ".quit" );
+		this.btnQ.onclick = this._onclickQuit.bind( this );
+
 		document.body.ondrop = this._evtDropHandler.bind( this );
 		document.body.ondragenter = this._evtDragEnterHandler.bind( this );
 		document.body.ondragover = this._evtDragOverHandler.bind( this );
 		document.body.ondragleave = this._evtDragLeaveHandler.bind( this );
+		
 		this._fillInfo();
 	}
 
@@ -17,28 +20,30 @@ class DragAndDrop {
 	}
 
 	// private
-	_fillInfoFile( el, d ) {
-		const elTitle = document.createElement( "div" ),
-			elDur = document.createElement( "div" ),
-			elBtn = document.createElement( "a" );
-
-		elTitle.innerHTML = "title: <b>" + d.name || "<i>Untitled</i>" + "</b>";
-		elDur.textContent = "duration: " + this.beatToTime( d.duration, d.bpm );
-		elBtn.textContent = "Render";
-		elBtn.classList.add( "btn-render" );
-		elBtn.onclick = render._evtRender.bind( render, d );
-		el.append( elTitle, elDur, elBtn );
+	_createBtn( cmp ) {
+		this.btnR = document.createElement( "a" );
+		this.btnR.id = "render-btn";
+		this.btnR.textContent = "Render";
+		this.btnR.dataset.status = "1";
+		this.elInfo.append( this.btnR );
 	}
-	_fillInfo( d ) {
-		const elInfo = document.getElementById( "info" );
+	_fillInfoFile( cmp ) {
+		const elTitle = document.createElement( "div" ),
+			elDur = document.createElement( "div" );
 
-		elInfo.innerHTML = "";
-		if ( typeof d === "string" ) {
-			elInfo.textContent = `${d} is not a GridSound file`;
-		} else if ( typeof d === "object" ) {
-			this._fillInfoFile.call( this, elInfo, d );
+		elTitle.innerHTML = "title: <b>" + cmp.name || "<i>Untitled</i>" + "</b>";
+		elDur.textContent = "duration: " + this.beatToTime( cmp.duration, cmp.bpm );
+		this.elInfo.append( elTitle, elDur );
+	}
+	_fillInfo( data ) {
+		this.elInfo.innerHTML = "";
+		if ( typeof data === "object" ) {
+			this._fillInfoFile( data );
+			this._createBtn( data );
 		} else {
-			elInfo.textContent = "Drop GridSound file (.gs) here";
+			this.elInfo.textContent = typeof data === "string" ?
+				`${data} is not a GridSound file` :
+				"Drop GridSound file (.gs) here"
 		}
 	}
 	_readFile( blob ) {
@@ -46,17 +51,16 @@ class DragAndDrop {
 
 		f.onload = e => {
 			try {
-				var d = JSON.parse( e.target.result );
+				const cmp = JSON.parse( e.target.result );
 				
-				this._fillInfo.call( this, d );
+				this._fillInfo( cmp );
 			} catch ( err ) {
-				this._fillInfo.call( this, blob.name );
+				this._fillInfo( blob.name );
 				console.error( err );
 			}
 		};
 		f.readAsText( blob );
 	}
-	_evtQuit( e ) {
 		this._fillInfo();
 	}
 	_evtDropHandler( e ) {
@@ -64,15 +68,14 @@ class DragAndDrop {
 			file = files[ 0 ];
 
 		e.preventDefault();
-		this.elDropBox.classList.remove( "dragover" );
 		if ( file.kind === "file" ) {
-			this._readFile.call( this, file.getAsFile() );
+			this._readFile( file.getAsFile() );
 		}
 		return false;
 	}
 	_evtDragEnterHandler( e ) {
-		this.elDropBox.classList.add( "dragover" );
-		this._evtQuit.call( this );
+		this.root.classList.add( "dragover" );
+		this._fillInfo();
 		return false;
 	}
 	_evtDragOverHandler( e ) {
@@ -80,6 +83,6 @@ class DragAndDrop {
 		return false;
 	}
 	_evtDragLeaveHandler( e ) {
-		this.elDropBox.classList.remove( "dragover" );
+		this.root.classList.remove( "dragover" );
 	}
 }
