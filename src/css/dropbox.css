@@ -12,12 +12,6 @@
 	pointer-events: none;
 }
 
-#dropbox.dragover {
-	border-color: var( --dropbox-dragover-color );
-	color: var( --dropbox-dragover-color );
-	transform: scale( 1.1 );
-}
-
 .quit {
 	position: absolute;
 	top: 0;
@@ -27,26 +21,27 @@
 	pointer-events: visible;
 }
 
-#info {
+#message {
 	display: flex;
 	flex-direction: column;
 	font-size: 1em;
 	font-weight: 100;
-}
-
-.dragover #info {
-	font-size: 1.1em;
-}
-
-.icon::before,
-#info {
 	transition: font-size var( --dropbox-drag-transDur );
+}
+
+#dropbox #file {
+	display: none;
+}
+
+#dropbox.render #file {
+	display: flex;
+	flex-direction: column;
 }
 
 #render-btn {
 	display: inline-block;
 	padding: .3em 1em;
-	margin: 16px auto 0;
+	margin: 0 auto;
 	color: #fff;
 	font-size: .9em;
 	background-color: #67a;
@@ -55,3 +50,23 @@
 	pointer-events: visible;
 	user-select: none;
 }
+
+#render-progress {
+	display: block;
+	margin: 12px 0;
+}
+
+#dropbox.dragover {
+	border-color: var( --dropbox-dragover-color );
+	color: var( --dropbox-dragover-color );
+	transform: scale( 1.1 );
+}
+
+.dragover #message {
+	font-size: 1.1em;
+}
+
+.dragover #file {
+	display: none;
+}
+

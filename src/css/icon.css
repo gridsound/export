@@ -2,13 +2,14 @@
 	font-family: "FontAwesome";
 	font-size: 4em;
 	margin-bottom: 24px;
+	transition: font-size var( --dropbox-drag-transDur );
 }
 
 .state::before {
 	content: "\f56d";
 }
 
-.dragover .state::before {
+.render .state::before {
 	content: "\f316";
 }
 
@@ -16,7 +17,8 @@
 	content: "\f317";
 }
 
-.dragover .quit::before {
+.dragover .quit::before,
+.render .quit::before {
 	content: "\f00d";
 }
 

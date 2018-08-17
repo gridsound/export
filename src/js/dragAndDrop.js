@@ -1,7 +1,10 @@
 class DragAndDrop {
 	constructor( elDropBox ) {
 		this.root = elDropBox;
-		this.elInfo = this.root.querySelector( "#info" );
+
+		this._elMessage = this.root.querySelector( "#message" );
+		this._elTitle = this.root.querySelector( "#title" );
+		this._elDuration = this.root.querySelector( "#duration" );
 		this.btnQ = this.root.querySelector( ".quit" );
 		this.btnQ.onclick = this._onclickQuit.bind( this );
 
@@ -10,7 +13,7 @@ class DragAndDrop {
 		document.body.ondragover = this._evtDragOverHandler.bind( this );
 		document.body.ondragleave = this._evtDragLeaveHandler.bind( this );
 		
-		this._fillInfo();
+		this._elMessage.textContent = "Drop GridSound file (.gs) here";
 	}
 
 	beatToTime( b, bpm ) {
@@ -20,31 +23,27 @@ class DragAndDrop {
 	}
 
 	// private
-	_createBtn( cmp ) {
-		this.btnR = document.createElement( "a" );
-		this.btnR.id = "render-btn";
-		this.btnR.textContent = "Render";
-		this.btnR.dataset.status = "1";
-		this.btnR.onclick = e => this._onclickRender.call( this, e, cmp );
-		this.elInfo.append( this.btnR );
+	_emptyFile() {
+		this._elTitle.innerHTML = "";
+		this._elDuration.textContent = "";
 	}
-	_fillInfoFile( cmp ) {
-		const elTitle = document.createElement( "div" ),
-			elDur = document.createElement( "div" );
+	_fillFile( cmp ) {
+		const t = cmp.name || "<i>Untitled</i>",
+			d = this.beatToTime( cmp.duration, cmp.bpm );
+			
+		this._elTitle.innerHTML = `title: <b>${t}</b>`;
+		this._elDuration.textContent = `duration: ${d}`;
+	}
+	_fillMessage( data ) {
+		const t = typeof data;
 
-		elTitle.innerHTML = "title: <b>" + cmp.name || "<i>Untitled</i>" + "</b>";
-		elDur.textContent = "duration: " + this.beatToTime( cmp.duration, cmp.bpm );
-		this.elInfo.append( elTitle, elDur );
-	}
-	_fillInfo( data ) {
-		this.elInfo.innerHTML = "";
-		if ( typeof data === "object" ) {
-			this._fillInfoFile( data );
-			this._createBtn( data );
+		this._elMessage.innerHTML = "";
+		if ( t === "object" ) {
+			this._fillFile( data );
+		} else if ( t === "string" ) {
+			this._elMessage.textContent = `${data} is not a GridSound file`;
 		} else {
-			this.elInfo.textContent = typeof data === "string" ?
-				`${data} is not a GridSound file` :
-				"Drop GridSound file (.gs) here"
+			this._elMessage.textContent = "Drop GridSound file (.gs) here";
 		}
 	}
 	_readFile( blob ) {
@@ -52,29 +51,25 @@ class DragAndDrop {
 
 		f.onload = e => {
 			try {
-				const cmp = JSON.parse( e.target.result );
-				
-				this._fillInfo( cmp );
+				var cmp = JSON.parse( e.target.result );
 			} catch ( err ) {
-				this._fillInfo( blob.name );
+				this._fillMessage( blob.name );
 				console.error( err );
+				return;
 			}
+			this._fillMessage( cmp );
+			render.setCmp( cmp );
+			this.root.classList.add( "render" );
 		};
 		f.readAsText( blob );
 	}
-	_onclickRender( e, cmp ) {
-		const a = this.btnR,
-			d = a.dataset;
-
-		if ( d.status === "2" ) {
-			return;
-		} else {
-			render( cmp, e.target );
-		}
-	}
 	_onclickQuit() {
+		render.sch.stop();
+		this._fillMessage();
+		this._emptyFile();
+		render.resetRenderElement();
 		this.root.classList.remove( "dragover" );
-		this._fillInfo();
+		this.root.classList.remove( "render" );
 	}
 	_evtDropHandler( e ) {
 		const files = e.dataTransfer.items || e.dataTransfer.files,
@@ -88,7 +83,8 @@ class DragAndDrop {
 	}
 	_evtDragEnterHandler( e ) {
 		this.root.classList.add( "dragover" );
-		this._fillInfo();
+		this.root.classList.remove( "render" );
+		this._fillMessage();
 		return false;
 	}
 	_evtDragOverHandler( e ) {
