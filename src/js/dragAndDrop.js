@@ -23,9 +23,10 @@ class DragAndDrop {
 	}
 
 	// private
-	_emptyFile() {
+	_resetFileElements() {
 		this._elTitle.innerHTML = "";
 		this._elDuration.textContent = "";
+		render.resetRenderElement();
 	}
 	_fillFile( cmp ) {
 		const t = cmp.name || "<i>Untitled</i>",
@@ -66,8 +67,7 @@ class DragAndDrop {
 	_onclickQuit() {
 		render.sch.stop();
 		this._fillMessage();
-		this._emptyFile();
-		render.resetRenderElement();
+		this._resetFileElements();
 		this.root.classList.remove( "dragover" );
 		this.root.classList.remove( "render" );
 	}
@@ -77,6 +77,7 @@ class DragAndDrop {
 
 		e.preventDefault();
 		if ( file.kind === "file" ) {
+			this._resetFileElements();
 			this._readFile( file.getAsFile() );
 		}
 		return false;
