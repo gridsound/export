@@ -33,11 +33,18 @@
 
 #dropbox #file {
 	display: none;
+	max-width: 80%;
 }
 
 #dropbox.render #file {
 	display: flex;
 	flex-direction: column;
+}
+
+#title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 #render-btn {
