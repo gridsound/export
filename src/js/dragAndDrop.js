@@ -61,6 +61,8 @@ class DragAndDrop {
 		};
 		f.readAsText( blob );
 	}
+	_onclickQuit() {
+		this.root.classList.remove( "dragover" );
 		this._fillInfo();
 	}
 	_evtDropHandler( e ) {
