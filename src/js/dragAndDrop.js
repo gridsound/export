@@ -25,6 +25,7 @@ class DragAndDrop {
 		this.btnR.id = "render-btn";
 		this.btnR.textContent = "Render";
 		this.btnR.dataset.status = "1";
+		this.btnR.onclick = e => this._onclickRender.call( this, e, cmp );
 		this.elInfo.append( this.btnR );
 	}
 	_fillInfoFile( cmp ) {
@@ -60,6 +61,16 @@ class DragAndDrop {
 			}
 		};
 		f.readAsText( blob );
+	}
+	_onclickRender( e, cmp ) {
+		const a = this.btnR,
+			d = a.dataset;
+
+		if ( d.status === "2" ) {
+			return;
+		} else {
+			render( cmp, e.target );
+		}
 	}
 	_onclickQuit() {
 		this.root.classList.remove( "dragover" );
