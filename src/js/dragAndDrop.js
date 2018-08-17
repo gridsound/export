@@ -32,7 +32,7 @@ class DragAndDrop {
 			d = this.beatToTime( cmp.duration, cmp.bpm );
 			
 		this._elTitle.innerHTML = `title: <b>${t}</b>`;
-		this._elDuration.textContent = `duration: ${d}`;
+		this._elDuration.innerHTML = `duration: <b>${d}</b>`;
 	}
 	_fillMessage( data ) {
 		const t = typeof data;
