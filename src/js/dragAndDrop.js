@@ -28,7 +28,6 @@ class DragAndDrop {
 		elBtn.classList.add( "btn-render" );
 		elBtn.onclick = render._evtRender.bind( render, d );
 		el.append( elTitle, elDur, elBtn );
-		this.elDropBox.classList.add( "render" );
 	}
 	_fillInfo( d ) {
 		const elInfo = document.getElementById( "info" );
@@ -58,7 +57,6 @@ class DragAndDrop {
 		f.readAsText( blob );
 	}
 	_evtQuit( e ) {
-		this.elDropBox.classList.remove( "render" );
 		this._fillInfo();
 	}
 	_evtDropHandler( e ) {

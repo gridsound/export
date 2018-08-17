@@ -8,7 +8,7 @@
 	content: "\f56d";
 }
 
-.render .state::before {
+.dragover .state::before {
 	content: "\f316";
 }
 
@@ -16,7 +16,7 @@
 	content: "\f317";
 }
 
-.render .quit::before {
+.dragover .quit::before {
 	content: "\f00d";
 }
 
