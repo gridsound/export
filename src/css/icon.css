@@ -17,7 +17,6 @@
 	content: "\f317";
 }
 
-.dragover .quit::before,
 .render .quit::before {
 	content: "\f00d";
 }

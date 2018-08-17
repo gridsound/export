@@ -3,8 +3,9 @@
 
 	--dropbox-width: 600px;
 	--dropbox-height: 400px;
-	--dropbox-color: #888;
+	--dropbox-color: rgba( 255, 255, 255, .4 );
+	--dropbox-borderSize: 6px;
 
-	--dropbox-dragover-color: #aaa;
+	--dropbox-dragover-color: rgba( 255, 255, 255, .6 );
 	--dropbox-drag-transDur: .2s;
 }
