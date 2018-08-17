@@ -1,7 +1,7 @@
 {
 	"name": "GridSound",
-	"short_name": "GS",
-	"description": "Export your GridSound composition in Wave file",
+	"short_name": "GSe",
+	"description": "Export your GridSound composition in Waveform Audio File",
 	"start_url": "/export/",
 	"scope": "/export/",
 	"display": "standalone",
