@@ -1,7 +1,14 @@
 class Render {
 	constructor() {
 		this._synths = {};
+		this._startedSched = new Map();
+		this._startedKeys = new Map();
+
 		this.sch = new gswaScheduler();
+		this.sch.ondatastart = this._onstartBlock.bind( this );
+		this.sch.ondatastop = this._onstopBlock.bind( this );
+		this.sch.currentTime = () => this._ctx.currentTime;
+
 		this._btn = document.querySelector( "#render-btn" );
 		this._btn.onclick = this._onclickBtn.bind( this );
 		this._progressbar = document.querySelector( "#render-progress" );
@@ -30,7 +37,12 @@ class Render {
 		} ).catch( console.error.bind( console ) );
 	}
 	_onstartKey( synthId, startedId, blc, when, off, dur ) {
-		this._synths[ synthId ].startKey( blc.key, when, off, dur, blc.gain, blc.pan )
+		this._startedKeys.set( startedId,
+			this._synths[ synthId ].startKey( blc.key, when, off, dur, blc.gain, blc.pan ) );
+	}
+	_onstopKey( synthId, startedId, blc ) {
+		this._synths[ synthId ].stopKey( this._startedKeys.get( startedId ) );
+		this._startedKeys.delete( startedId );
 	}
 	_onstartBlock( startedId, blc, when, off, dur ) {
 		if ( this._cmp.tracks[ blc.track ].toggle ) {
@@ -39,12 +51,22 @@ class Render {
 				dur = Math.ceil( this._cmp.duration * 60 / this._cmp.bpm ) || 1;
 
 			sch.pattern = pat;
+			this._startedSched.set( startedId, sch );
 			sch.currentTime = () => this._ctx.currentTime;
 			sch.ondatastart = this._onstartKey.bind( this, pat.synth );
+			sch.ondatastop = this._onstopKey.bind( this, pat.synth );
 			sch.setBPM( this._cmp.bpm );
 			Object.assign( sch.data, this._cmp.keys[ pat.keys ] );
 			sch.enableStreaming( false );
 			sch.start( when, off, dur );
+		}
+	}
+	_onstopBlock( startedId, blc ) {
+		const sch = this._startedSched.get( startedId );
+
+		if ( sch ) {
+			sch.stop();
+			this._startedSched.delete( startedId );
 		}
 	}
 	_onclickBtn() {
@@ -79,10 +101,8 @@ class Render {
 			this._synths[ id ] = syn;
 		} );
 
-		this.sch.setBPM( cmp.bpm );
 		this.sch.enableStreaming( false );
-		this.sch.ondatastart = this._onstartBlock.bind( this );
-		this.sch.currentTime = () => this._ctx.currentTime;
+		this.sch.setBPM( cmp.bpm );
 		Object.entries( cmp.blocks ).forEach( ( [ id, obj ] ) => {
 			this.sch.data[ id ] = obj;
 		} );
